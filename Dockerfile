@@ -1,17 +1,19 @@
-# Stage 1: Build the application
-FROM ://mcr.microsoft.com AS build
+# Stage 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["scale-api-poc.csproj", "."]
-RUN dotnet restore
-COPY . .
-WORKDIR /src
-RUN dotnet publish -c Release -o /app/publish
 
-# Stage 2: Create the runtime image
-FROM ://mcr.microsoft.com AS final
+COPY . .
+
+RUN dotnet restore scale-api-poc.csproj
+RUN dotnet publish scale-api-poc.csproj -c Release -o /app/publish
+
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
+
 COPY --from=build /app/publish .
-# Cloud Run requires the application to listen on port 8080 by default
-ENV ASPNETCORE_URLS=http://+:8080
+
+ENV ASPNETCORE_URLS=http://0.0.0.0:8080
 EXPOSE 8080
+
 ENTRYPOINT ["dotnet", "Scale.Api.Poc.dll"]
