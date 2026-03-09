@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using ScaleApiPoc.Authentication;
 using ScaleApiPoc.Data;
+using scale_api_poc.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +63,9 @@ if (connectionString.TrimStart().StartsWith("postgresql://", StringComparison.Or
     }
     connectionString = npgsqlBuilder.ConnectionString;
 }
+
+builder.Services.Configure<R2Options>(builder.Configuration.GetSection(R2Options.SectionName));
+builder.Services.AddSingleton<IR2StorageService, R2StorageService>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
