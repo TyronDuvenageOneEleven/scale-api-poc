@@ -78,7 +78,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:5173", "https://scale-app-poc.tyron-360.workers.dev")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 //builder.WebHost.ConfigureKestrel(serverOptions =>
