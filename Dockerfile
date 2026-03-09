@@ -1,5 +1,4 @@
-# Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-preview AS build
 WORKDIR /src
 
 COPY . .
@@ -7,13 +6,13 @@ COPY . .
 RUN dotnet restore scale-api-poc.csproj
 RUN dotnet publish scale-api-poc.csproj -c Release -o /app/publish
 
-# Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview
 WORKDIR /app
 
 COPY --from=build /app/publish .
 
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+
 EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "Scale.Api.Poc.dll"]
+ENTRYPOINT ["dotnet", "scale-api-poc.dll"]
