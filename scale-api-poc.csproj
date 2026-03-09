@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>scale_api_poc</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Exclude Data project source and obj so we use the project reference only -->
+    <Compile Remove="ScaleApiPoc.Data\**" />
+    <Compile Remove="ScaleApiPoc.Authentication\**" />
+    <Content Remove="ScaleApiPoc.Data\**" />
+    <Content Remove="ScaleApiPoc.Authentication\**" />
+    <None Remove="ScaleApiPoc.Data\**" />
+    <None Remove="ScaleApiPoc.Authentication\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="ScaleApiPoc.Data\ScaleApiPoc.Data.csproj" />
+    <ProjectReference Include="ScaleApiPoc.Authentication\ScaleApiPoc.Authentication.csproj" />
+  </ItemGroup>
+
+</Project>

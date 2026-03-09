@@ -1,0 +1,6 @@
+@scale_api_poc_HostAddress = http://localhost:5068
+
+GET {{scale_api_poc_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
