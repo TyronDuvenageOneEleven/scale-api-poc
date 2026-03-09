@@ -5,6 +5,24 @@ using ScaleApiPoc.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (builder.Environment.IsDevelopment() && string.IsNullOrWhiteSpace(builder.Configuration["Firebase:CredentialsJson"]))
+{
+    var firebaseDirectory = Path.Combine(
+        builder.Environment.ContentRootPath,
+        "ScaleApiPoc.Authentication",
+        "firebase");
+    if (Directory.Exists(firebaseDirectory))
+    {
+        var credentialsFilePath = Directory
+            .GetFiles(firebaseDirectory, "*-adminsdk-*.json")
+            .FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(credentialsFilePath))
+        {
+            builder.Configuration["Firebase:CredentialsJson"] = File.ReadAllText(credentialsFilePath);
+        }
+    }
+}
+
 // Resolve connection string: Neon (and others) often give a postgresql:// URI; Npgsql needs key=value format.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
 if (connectionString.TrimStart().StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase)
@@ -59,10 +77,10 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(8080);
-});
+//builder.WebHost.ConfigureKestrel(serverOptions =>
+//{
+//    serverOptions.ListenAnyIP(8080);
+//});
 
 var app = builder.Build();
 

@@ -13,7 +13,7 @@ namespace ScaleApiPoc.Authentication;
 public sealed class FirebaseAuthOptions
 {
     public string? ProjectId { get; set; }
-    public string? CredentialsPath { get; set; }
+    public string? CredentialsJson { get; set; }
     public string? GoogleClientId { get; set; }
     public string? WebApiKey { get; set; }
 }
@@ -308,9 +308,9 @@ internal sealed class FirebaseAppProvider : IDisposable
             appOptions.ProjectId = configuredOptions.ProjectId;
         }
 
-        if (!string.IsNullOrWhiteSpace(configuredOptions.CredentialsPath))
+        if (!string.IsNullOrWhiteSpace(configuredOptions.CredentialsJson))
         {
-            appOptions.Credential = GoogleCredential.FromFile(configuredOptions.CredentialsPath);
+            appOptions.Credential = GoogleCredential.FromJson(configuredOptions.CredentialsJson);
         }
         else
         {
